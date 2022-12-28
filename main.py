@@ -27,6 +27,7 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
             try:
                 tt = str(eval(MyButton.save + t))
                 calc.textfield.set_text(calc.textfield, tt)
+                MyButton.save = ''
             except ZeroDivisionError:
                 calc.textfield.set_text(calc.textfield, 'На нуль ділити не можна')
         elif self.sym == 'C':
@@ -35,11 +36,11 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
 class CalculatorApp(MDApp):
     def build(self):
         gl = MDGridLayout(
-                    spacing = "56dp",
+                    spacing = "20dp",
                     adaptive_size = True,
-                    pos_hint = {"center_x": 0.5, "center_y": 0.5},
-                    rows = 5,
-                    cols = 5
+                    pos_hint = {"center_x": 0.5, "center_y": 0.4},
+                    rows = 4,
+                    cols = 4
                 )
         btn1 = MyButton(sym = '1', icon = "Images\\a1.png", md_bg_color = "#ffffff")
         btn2 = MyButton(sym = '2', icon = "Images\\a2.png", md_bg_color = "#ffffff")
