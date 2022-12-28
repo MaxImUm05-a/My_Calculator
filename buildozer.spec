@@ -4,10 +4,10 @@
 title = MyCalculator
 
 # (str) Package name
-package.name = calc
+package.name = my_calculator
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.5etzedmax
+package.domain = org.grema
 
 # (str) Source code where the main.py live
 source.dir = .
