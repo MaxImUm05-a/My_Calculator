@@ -18,8 +18,10 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
         if self.sym in '1234567890':
             if MyButton.save == '':
                 calc.textfield.set_text(calc.textfield, t + self.sym)
-            else:
+            elif MyButton.save == t:
                 calc.textfield.set_text(calc.textfield, self.sym)
+            else:
+                calc.textfield.set_text(calc.textfield, t + self.sym)
         elif self.sym in '*/+-':
             calc.textfield.set_text(calc.textfield, t + self.sym)
             MyButton.save = t + self.sym
@@ -42,22 +44,22 @@ class CalculatorApp(MDApp):
                     rows = 4,
                     cols = 4
                 )
-        btn1 = MyButton(sym = '1', icon = "%(source.dir)s/Images/a1.png", md_bg_color = "#ffffff")
-        btn2 = MyButton(sym = '2', icon = "%(source.dir)s/Images/a2.png", md_bg_color = "#ffffff")
-        btn3 = MyButton(sym = '3', icon = "%(source.dir)s/Images/a3.png", md_bg_color = "#ffffff")
-        btn4 = MyButton(sym = '4', icon = "%(source.dir)s/Images/a4.png", md_bg_color = "#ffffff")
-        btn5 = MyButton(sym = '5', icon = "%(source.dir)s/Images/a5.png", md_bg_color = "#ffffff")
-        btn6 = MyButton(sym = '6', icon = "%(source.dir)s/Images/a6.png", md_bg_color = "#ffffff")
-        btn7 = MyButton(sym = '7', icon = "%(source.dir)s/Images/a7.png", md_bg_color = "#ffffff")
-        btn8 = MyButton(sym = '8', icon = "%(source.dir)s/Images/a8.png", md_bg_color = "#ffffff")
-        btn9 = MyButton(sym = '9', icon = "%(source.dir)s/Images/a9.png", md_bg_color = "#ffffff")
-        btn0 = MyButton(sym = '0', icon = "%(source.dir)s/Images/a0.png", md_bg_color = "#ffffff")
-        btnm = MyButton(sym = '-', icon = "%(source.dir)s/Images/a-.png", md_bg_color = "#ffffff")
-        btnd = MyButton(sym = '+', icon = "%(source.dir)s/Images/a+.png", md_bg_color = "#ffffff")
-        btnr = MyButton(sym = '=', icon = "%(source.dir)s/Images/a=.png", md_bg_color = "#ffffff")
-        btnp = MyButton(sym = '/', icon = "%(source.dir)s/Images/a'.png", md_bg_color = "#ffffff")
-        btnx = MyButton(sym = '*', icon = "%(source.dir)s/Images/ax.png", md_bg_color = "#ffffff")
-        btnc = MyButton(sym = 'C', icon = "%(source.dir)s/Images/ac.png", md_bg_color = "#ffffff")
+        btn1 = MyButton(sym = '1', icon = "Images/a1.png", md_bg_color = "#ffffff")
+        btn2 = MyButton(sym = '2', icon = "Images/a2.png", md_bg_color = "#ffffff")
+        btn3 = MyButton(sym = '3', icon = "Images/a3.png", md_bg_color = "#ffffff")
+        btn4 = MyButton(sym = '4', icon = "Images/a4.png", md_bg_color = "#ffffff")
+        btn5 = MyButton(sym = '5', icon = "Images/a5.png", md_bg_color = "#ffffff")
+        btn6 = MyButton(sym = '6', icon = "Images/a6.png", md_bg_color = "#ffffff")
+        btn7 = MyButton(sym = '7', icon = "Images/a7.png", md_bg_color = "#ffffff")
+        btn8 = MyButton(sym = '8', icon = "Images/a8.png", md_bg_color = "#ffffff")
+        btn9 = MyButton(sym = '9', icon = "Images/a9.png", md_bg_color = "#ffffff")
+        btn0 = MyButton(sym = '0', icon = "Images/a0.png", md_bg_color = "#ffffff")
+        btnm = MyButton(sym = '-', icon = "Images/a-.png", md_bg_color = "#ffffff")
+        btnd = MyButton(sym = '+', icon = "Images/a+.png", md_bg_color = "#ffffff")
+        btnr = MyButton(sym = '=', icon = "Images/a=.png", md_bg_color = "#ffffff")
+        btnp = MyButton(sym = '/', icon = "Images/a'.png", md_bg_color = "#ffffff")
+        btnx = MyButton(sym = '*', icon = "Images/ax.png", md_bg_color = "#ffffff")
+        btnc = MyButton(sym = 'C', icon = "Images/ac.png", md_bg_color = "#ffffff")
         gl.add_widget(btn1)
         gl.add_widget(btn2)
         gl.add_widget(btn3)

@@ -16,7 +16,7 @@ source.dir = .
 source.include_exts = py,png,jpg
 
 # (list) List of inclusions using pattern matching
-source.include_patterns = images/*.png
+source.include_patterns = Images/*.png
 
 # (list) Source files to exclude (let empty to not exclude anything)
 source.exclude_exts = LICENSE, READMY.md
@@ -29,7 +29,7 @@ source.exclude_dirs =
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.1.2
+version = 0.1.3
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
