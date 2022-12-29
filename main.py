@@ -7,6 +7,7 @@ from kivymd.uix.behaviors import TouchBehavior, MagicBehavior
 
 class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
     save = ''
+    new_viraz = False
 
     def __init__(self, sym, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -15,6 +16,13 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
     def on_release(self):
         super().on_release()
         t = calc.textfield.text
+        if len(t) > 1 and t[0] == '0':
+            t = t[1:]
+        if t == 'На нуль ділити не можна':
+            t = ''
+        if MyButton.new_viraz == True:
+            t = ''
+            MyButton.new_viraz = False
         if self.sym in '1234567890':
             if MyButton.save == '':
                 calc.textfield.set_text(calc.textfield, t + self.sym)
@@ -22,14 +30,15 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
                 calc.textfield.set_text(calc.textfield, self.sym)
             else:
                 calc.textfield.set_text(calc.textfield, t + self.sym)
-        elif self.sym in '*/+-':
+        elif self.sym in '*/+-' and t != '':
             calc.textfield.set_text(calc.textfield, t + self.sym)
             MyButton.save = t + self.sym
-        elif self.sym == '=':
+        elif self.sym == '=' and t != '':
             try:
                 tt = str(eval(MyButton.save + t))
                 calc.textfield.set_text(calc.textfield, tt)
                 MyButton.save = ''
+                MyButton.new_viraz = True
             except ZeroDivisionError:
                 calc.textfield.set_text(calc.textfield, 'На нуль ділити не можна')
         elif self.sym == 'C':
