@@ -1,12 +1,14 @@
 from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.textfield import MDTextField
+from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.gridlayout import MDGridLayout
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.behaviors import TouchBehavior, MagicBehavior
 
 class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
     save = ''
+    new_viraz = False
 
     def __init__(self, sym, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -14,29 +16,44 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
 
     def on_release(self):
         super().on_release()
-        t = calc.textfield.text
+        t = calc.lab[-1].text
+        if len(t) > 1 and t[0] == '0':
+            t = t[1:]
+        if t == 'На нуль ділити не можна':
+            t = ''
+        if MyButton.new_viraz == True:
+            MyButton.new_viraz = False
+            calc.lab.append(MDLabel(bold = True, pos_hint = {"center_x": 0.2, "center_y": 0.2}))
+            calc.bl.add_widget(calc.lab[-1])
+            calc.lab[-2].bold = False
+            calc.lab[-2].text = MyButton.save
+            t = MyButton.save = ''
         if self.sym in '1234567890':
             if MyButton.save == '':
-                calc.textfield.set_text(calc.textfield, t + self.sym)
+                calc.lab[-1].text = t + self.sym
             elif MyButton.save == t:
-                calc.textfield.set_text(calc.textfield, self.sym)
+                calc.lab[-1].text = self.sym
             else:
-                calc.textfield.set_text(calc.textfield, t + self.sym)
-        elif self.sym in '*/+-':
-            calc.textfield.set_text(calc.textfield, t + self.sym)
+                calc.lab[-1].text = t + self.sym
+        elif self.sym in '*/+-' and t != '':
+            calc.lab[-1].text = t + self.sym
             MyButton.save = t + self.sym
-        elif self.sym == '=':
+        elif self.sym == '=' and t != '':
             try:
                 tt = str(eval(MyButton.save + t))
-                calc.textfield.set_text(calc.textfield, tt)
-                MyButton.save = ''
+                calc.lab[-1].text = tt
+                MyButton.save = MyButton.save + t + '=' + tt
+                MyButton.new_viraz = True
             except ZeroDivisionError:
-                calc.textfield.set_text(calc.textfield, 'На нуль ділити не можна')
+                calc.lab[-1].text = 'На нуль ділити не можна'
         elif self.sym == 'C':
-            calc.textfield.set_text(calc.textfield, t[:-1])
+            calc.lab[-1].text = t[:-1]
 
 class CalculatorApp(MDApp):
+    lab = []
+
     def build(self):
+        bll = MDBoxLayout(orientation = 'vertical')
         gl = MDGridLayout(
                     spacing = "20dp",
                     adaptive_size = True,
@@ -44,6 +61,12 @@ class CalculatorApp(MDApp):
                     rows = 4,
                     cols = 4
                 )
+        self.bl = MDBoxLayout(
+            pos_hint = {"center_x": 0.9, "center_y": 0.3},
+            orientation='vertical',
+            background = 'red'
+        )
+        self.lab.append(MDLabel(bold = True, pos_hint = {"center_x": 0.2, "center_y": 0.2}))
         btn1 = MyButton(sym = '1', icon = "Images/a1.png", md_bg_color = "#ffffff")
         btn2 = MyButton(sym = '2', icon = "Images/a2.png", md_bg_color = "#ffffff")
         btn3 = MyButton(sym = '3', icon = "Images/a3.png", md_bg_color = "#ffffff")
@@ -76,15 +99,12 @@ class CalculatorApp(MDApp):
         gl.add_widget(btnp)
         gl.add_widget(btnx)
         gl.add_widget(btnc)
-        self.textfield = MDTextField(
-                    mode = 'rectangle',
-                    pos_hint = {"center_x": 0.5, "center_y": 0.95}
-                )
-        self.theme_cls.primary_palette = "Orange"
+        self.bl.add_widget(self.lab[0])
+        bll.add_widget(self.bl)
+        bll.add_widget(gl)
         return (
             MDScreen(
-                self.textfield,
-                gl
+                bll
             )
         )
 
