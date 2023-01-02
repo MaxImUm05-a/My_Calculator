@@ -20,7 +20,7 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
         if len(calc.lab) == 2:
             tt = calc.lab[-2].text
         if tt == '365-311=54':
-            calc.lab[-2].text = 'Вітаю, ти знайшов першу пасхалку'
+            calc.lab[-2].text = 'Вітаю, ти знайшов першу пасхалку!'
             calc.lab[-2].theme_text_color = "Custom"
             calc.lab[-2].text_color = '#ff0000'
             calc.lab[-2].on_text_color(calc.lab[-2], '#ff0000')
