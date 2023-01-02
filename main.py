@@ -8,7 +8,6 @@ from kivymd.uix.behaviors import TouchBehavior, MagicBehavior
 
 class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
     save = ''
-    new_viraz = False
 
     def __init__(self, sym, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -16,18 +15,19 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
 
     def on_release(self):
         super().on_release()
+        tt = ''
         t = calc.lab[-1].text
+        if len(calc.lab) == 2:
+            tt = calc.lab[-2].text
+        if tt == '365-311=54':
+            calc.lab[-2].text = 'Вітаю, ти знайшов першу пасхалку'
+            calc.lab[-2].theme_text_color = "Custom"
+            calc.lab[-2].text_color = '#ff0000'
+            calc.lab[-2].on_text_color(calc.lab[-2], '#ff0000')
         if len(t) > 1 and t[0] == '0':
             t = t[1:]
         if t == 'На нуль ділити не можна':
             t = ''
-        if MyButton.new_viraz == True:
-            calc.lab.append(MDLabel(bold = True, pos_hint = {"center_x": 0.2, "center_y": 0.2}))
-            calc.bl.add_widget(calc.lab[-1])
-            calc.lab[-2].bold = False
-            calc.lab[-2].text = MyButton.save
-            t = MyButton.save = ''
-            MyButton.new_viraz = False
         if self.sym in '1234567890':
             if MyButton.save == '':
                 calc.lab[-1].text = t + self.sym
@@ -36,14 +36,33 @@ class MyButton(MDIconButton, TouchBehavior, MagicBehavior):
             else:
                 calc.lab[-1].text = t + self.sym
         elif self.sym in '*/+-' and t != '':
-            calc.lab[-1].text = t + self.sym
-            MyButton.save = t + self.sym
+            if MyButton.save == '':
+                calc.lab[-1].text = t + self.sym
+                MyButton.save = t + self.sym
+            else:
+                if ('+' or '-' or '/' or '*') == MyButton.save[-1]:
+                    calc.lab[-1].text = t[:-1] + self.sym
+                    MyButton.save = t[:-1] + self.sym
+                else:
+                    calc.lab.append(MDLabel(bold=True, pos_hint={"center_x": 0.2, "center_y": 0.2}))
+                    calc.bl.add_widget(calc.lab[-1])
+                    calc.lab[-2].bold = False
+                    try:
+                        calc.lab[-2].text = MyButton.save + t + '=' + str(eval(MyButton.save + t))
+                        calc.lab[-1].text = str(eval(MyButton.save + t)) + self.sym
+                    except ZeroDivisionError:
+                        calc.lab[-1].text = 'На нуль ділити не можна'
+                    t = MyButton.save = ''
         elif self.sym == '=' and t != '':
             try:
                 tt = str(eval(MyButton.save + t))
                 calc.lab[-1].text = tt
                 MyButton.save = MyButton.save + t + '=' + tt
-                MyButton.new_viraz = True
+                calc.lab.append(MDLabel(bold=True, pos_hint={"center_x": 0.2, "center_y": 0.2}))
+                calc.bl.add_widget(calc.lab[-1])
+                calc.lab[-2].bold = False
+                calc.lab[-2].text = MyButton.save
+                t = MyButton.save = ''
             except ZeroDivisionError:
                 calc.lab[-1].text = 'На нуль ділити не можна'
         elif self.sym == 'C':
@@ -55,12 +74,13 @@ class CalculatorApp(MDApp):
     def build(self):
         bll = MDBoxLayout(orientation = 'vertical')
         gl = MDGridLayout(
-                    spacing = "20dp",
-                    adaptive_size = True,
-                    pos_hint = {"center_x": 0.5, "center_y": 0.4},
-                    rows = 4,
-                    cols = 4
-                )
+            spacing = "20dp",
+            adaptive_size = True,
+            padding = 20,
+            pos_hint = {"center_x": 0.5, "center_y": 0.5},
+            rows = 4,
+            cols = 4
+            )
         self.bl = MDBoxLayout(
             pos_hint = {"center_x": 0.9, "center_y": 0.3},
             orientation = 'vertical'
